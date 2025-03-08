@@ -1,8 +1,34 @@
 AllCops:
   TargetRubyVersion: 3.1
+  Exclude:
+    - active_service.gemspec
+    - bin/*
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - spec/*/**.rb
+
+Lint/MissingSuper:
+  AllowedParentClasses:
+    - ActiveService::Base
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/*/**.rb
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Exclude:
+    - lib/active_service.rb
+
+Style/Documentation:
+  Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  Enabled: false

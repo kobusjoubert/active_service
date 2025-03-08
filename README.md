@@ -1,8 +1,6 @@
-# ActiveService
+# Active Service
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/active_service`. To experiment with that code, run `bin/console` for an interactive prompt.
+Active Service provides a standardized way to create service objects.
 
 ## Installation
 
@@ -22,7 +20,102 @@ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 
 ## Usage
 
-TODO: Write usage instructions here
+Your child classes should inherit from `ActiveService::Base`.
+
+Now you can start adding your own service object classes in your gem's `lib` folder.
+
+Each service object must define only one public method named `call`.
+
+A `response` attribute is set with the result of the `call` method.
+
+An `errors` object will be set if you specified any validations that failed before the `call` method could be invoked.
+
+There is also a `before_call` hook to set up anything before invoking the `call` method. This only happens after all validations have passed.
+
+Define a service object with optional validations and callbacks.
+
+```ruby
+include 'active_service'
+
+class YourGemName::SomeResource::GetService < ActiveService::Base
+  attr_reader :message
+
+  validates :message, presence: true
+
+  before_call :strip_message
+
+  def initialize(message: nil)
+    @message = message
+  end
+
+  def call
+    { foo: message }
+  end
+
+  private
+
+  def strip_message
+    @message.strip!
+  end
+end
+```
+
+You will get a **response** object.
+
+```ruby
+service = YourGemName::SomeResource::GetService.call(message: ' bar ')
+service.valid? # => true
+service.response # => { foo: 'bar' }
+```
+
+And an **errors** object when validation failed.
+
+```ruby
+service = YourGemName::SomeResource::GetService.call(message: '')
+service.valid? # => false
+service.errors.full_messages # => ["Message can't be blank"]
+service.response # => nil
+```
+
+If you have secrets, use a **configuration** block.
+
+```ruby
+require 'net/http'
+
+class YourGemName::BaseService < ActiveService::Base
+  config_accessor :api_key, instance_writer: false
+
+  configure do |config|
+    config.api_key = ENV['API_KEY']
+  end
+
+  def call
+    Net::HTTP.get_response(URI("http://example.com/api?#{URI.encode_www_form(api_key: api_key)}"))
+  end
+end
+```
+
+## Gem Creation
+
+To create your own gem for a service.
+
+```bash
+gem update --system
+```
+
+Build your gem.
+
+```bash
+bundle gem your_service --test=rspec --linter=rubocop --ci=github --github-username=kobusjoubert --git --changelog --mit
+```
+
+Then add Active Service as a dependency in your gemspec.
+
+```ruby
+spec.add_dependency 'active_service'
+```
+
+Now start adding your service objects in the `lib` directory and make sure they inherit from `ActiveService::Base`.
 
 ## Development
 

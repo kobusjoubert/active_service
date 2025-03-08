@@ -106,7 +106,7 @@ gem update --system
 Build your gem.
 
 ```bash
-bundle gem your_service --test=rspec --linter=rubocop --ci=github --github-username=kobusjoubert --git --changelog --mit
+bundle gem your_service --test=rspec --linter=rubocop --ci=github --github-username=<your_profile_name> --git --changelog --mit
 ```
 
 Then add Active Service as a dependency in your gemspec.

@@ -3,14 +3,10 @@
 require 'spec_helper'
 
 RSpec.describe ActiveService::Base do
-  before do
-    Object.send(:remove_const, :TestService) if Object.const_defined?(:TestService)
-  end
-
   describe '.call' do
     context 'when validations pass' do
       let(:service_class) do
-        TestService = Class.new(ActiveService::Base) do
+        Class.new(ActiveService::Base) do
           attr_accessor :input
 
           def initialize(input)
@@ -23,33 +19,38 @@ RSpec.describe ActiveService::Base do
         end
       end
 
+      before do
+        stub_const('TestService', service_class)
+      end
+
       it 'returns a service instance' do
-        result = service_class.call('test')
-        expect(result).to be_an_instance_of(service_class)
+        result = TestService.call('test')
+        expect(result).to be_an_instance_of(TestService)
       end
 
       it 'sets the response from the call method' do
-        result = service_class.call('test')
+        result = TestService.call('test')
         expect(result.response).to eq('Processed: test')
       end
 
       it 'runs the callbacks around call' do
         callback_executed = false
-
-        service_with_callbacks = Class.new(service_class) do
+        callback_service = Class.new(TestService) do
           before_call do
             callback_executed = true
           end
         end
 
-        service_with_callbacks.call('test')
+        stub_const('CallbackService', callback_service)
+
+        CallbackService.call('test')
         expect(callback_executed).to be true
       end
     end
 
     context 'when validations fail' do
       let(:invalid_service_class) do
-        TestService = Class.new(ActiveService::Base) do
+        Class.new(ActiveService::Base) do
           attr_accessor :input
 
           validates :input, presence: true
@@ -64,14 +65,18 @@ RSpec.describe ActiveService::Base do
         end
       end
 
+      before do
+        stub_const('InvalidTestService', invalid_service_class)
+      end
+
       it 'returns the service instance without calling the call method' do
-        result = invalid_service_class.call(nil)
-        expect(result).to be_an_instance_of(invalid_service_class)
+        result = InvalidTestService.call(nil)
+        expect(result).to be_an_instance_of(InvalidTestService)
         expect(result.response).to be_nil
       end
 
       it 'has errors when validations fail' do
-        result = invalid_service_class.call(nil)
+        result = InvalidTestService.call(nil)
         expect(result).to be_invalid
         expect(result.errors[:input]).to include("can't be blank")
       end
@@ -79,7 +84,7 @@ RSpec.describe ActiveService::Base do
 
     context 'with callbacks' do
       let(:callback_service_class) do
-        TestService = Class.new(ActiveService::Base) do
+        Class.new(ActiveService::Base) do
           attr_accessor :input, :tracking
 
           def initialize(input)
@@ -107,8 +112,12 @@ RSpec.describe ActiveService::Base do
         end
       end
 
+      before do
+        stub_const('CallbackTestService', callback_service_class)
+      end
+
       it 'executes callbacks in the correct order' do
-        result = callback_service_class.call('test')
+        result = CallbackTestService.call('test')
         expect(result.tracking).to eq([:before, :call, :after])
       end
     end

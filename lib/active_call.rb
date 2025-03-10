@@ -3,11 +3,11 @@
 require 'active_model'
 require 'zeitwerk'
 
-require_relative 'active_service/version'
+require_relative 'active_call/version'
 
 loader = Zeitwerk::Loader.for_gem
 loader.setup
 
-module ActiveService
+module ActiveCall
   class Error < StandardError; end
 end

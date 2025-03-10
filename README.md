@@ -1,6 +1,6 @@
-# Active Service
+# Active Call
 
-Active Service provides a standardized way to create service objects.
+Active Call provides a standardized way to create service objects.
 
 ## Installation
 
@@ -20,7 +20,7 @@ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 
 ## Usage
 
-Your child classes should inherit from `ActiveService::Base`.
+Your child classes should inherit from `ActiveCall::Base`.
 
 Now you can start adding your own service object classes in your gem's `lib` folder.
 
@@ -35,9 +35,9 @@ There is also a `before_call` hook to set up anything before invoking the `call`
 Define a service object with optional validations and callbacks.
 
 ```ruby
-require 'active_service'
+require 'active_call'
 
-class YourGemName::SomeResource::GetService < ActiveService::Base
+class YourGemName::SomeResource::GetService < ActiveCall::Base
   attr_reader :message
 
   validates :message, presence: true
@@ -82,7 +82,7 @@ If you have secrets, use a **configuration** block.
 ```ruby
 require 'net/http'
 
-class YourGemName::BaseService < ActiveService::Base
+class YourGemName::BaseService < ActiveCall::Base
   config_accessor :api_key, default: ENV['API_KEY'], instance_writer: false
 
   def call
@@ -113,13 +113,13 @@ Build your gem.
 bundle gem your_service --test=rspec --linter=rubocop --ci=github --github-username=<your_profile_name> --git --changelog --mit
 ```
 
-Then add Active Service as a dependency in your gemspec.
+Then add Active Call as a dependency in your gemspec.
 
 ```ruby
-spec.add_dependency 'active_service'
+spec.add_dependency 'active_call'
 ```
 
-Now start adding your service objects in the `lib` directory and make sure they inherit from `ActiveService::Base`.
+Now start adding your service objects in the `lib` directory and make sure they inherit from `ActiveCall::Base`.
 
 ## Development
 
@@ -129,7 +129,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/kobusjoubert/active_service.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kobusjoubert/active_call.
 
 ## License
 

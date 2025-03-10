@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in active_service.gemspec
+# Specify your gem's dependencies in active_call.gemspec
 gemspec
 
 gem 'debug'

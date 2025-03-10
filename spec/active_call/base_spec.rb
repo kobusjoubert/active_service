@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-RSpec.describe ActiveService::Base do
+RSpec.describe ActiveCall::Base do
   describe '.call' do
     context 'when validations pass' do
       let(:service_class) do
-        Class.new(ActiveService::Base) do
+        Class.new(ActiveCall::Base) do
           attr_accessor :input
 
           def initialize(input)
@@ -50,7 +50,7 @@ RSpec.describe ActiveService::Base do
 
     context 'when validations fail' do
       let(:invalid_service_class) do
-        Class.new(ActiveService::Base) do
+        Class.new(ActiveCall::Base) do
           attr_accessor :input
 
           validates :input, presence: true
@@ -84,7 +84,7 @@ RSpec.describe ActiveService::Base do
 
     context 'with callbacks' do
       let(:callback_service_class) do
-        Class.new(ActiveService::Base) do
+        Class.new(ActiveCall::Base) do
           attr_accessor :input, :tracking
 
           def initialize(input)

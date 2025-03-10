@@ -10,14 +10,14 @@ AllCops:
     - 'lib/**/*.rb'
     - 'spec/**/*.rb'
   Exclude:
-    - active_service.gemspec
+    - active_call.gemspec
     - bin/*
     - 'vendor/**/*'
     - 'gem/**/*'
 
 Lint/MissingSuper:
   AllowedParentClasses:
-    - ActiveService::Base
+    - ActiveCall::Base
 
 Metrics/BlockLength:
   Exclude:
@@ -32,7 +32,7 @@ RSpec/MultipleExpectations:
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
   Exclude:
-    - lib/active_service.rb
+    - lib/active_call.rb
 
 Style/Documentation:
   Enabled: false

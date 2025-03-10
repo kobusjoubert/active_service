@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActiveService::Base
+class ActiveCall::Base
   extend ActiveModel::Callbacks
   include ActiveModel::Validations
   include ActiveSupport::Configurable

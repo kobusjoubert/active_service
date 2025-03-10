@@ -35,7 +35,7 @@ There is also a `before_call` hook to set up anything before invoking the `call`
 Define a service object with optional validations and callbacks.
 
 ```ruby
-include 'active_service'
+require 'active_service'
 
 class YourGemName::SomeResource::GetService < ActiveService::Base
   attr_reader :message
@@ -83,15 +83,19 @@ If you have secrets, use a **configuration** block.
 require 'net/http'
 
 class YourGemName::BaseService < ActiveService::Base
-  config_accessor :api_key, instance_writer: false
-
-  configure do |config|
-    config.api_key = ENV['API_KEY']
-  end
+  config_accessor :api_key, default: ENV['API_KEY'], instance_writer: false
 
   def call
     Net::HTTP.get_response(URI("http://example.com/api?#{URI.encode_www_form(api_key: api_key)}"))
   end
+end
+```
+
+Then in your application code you can overrite the configuration defaults.
+
+```ruby
+YourGemName::BaseService.configure do |config|
+  config.api_key = Rails.application.credentials.api_key || ENV['API_KEY']
 end
 ```
 

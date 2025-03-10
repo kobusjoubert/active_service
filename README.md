@@ -1,5 +1,9 @@
 # Active Call
 
+**See [https://github.com/kobusjoubert/active_call](https://github.com/kobusjoubert/active_call]) or [https://rubygems.org/gems/active_call](https://rubygems.org/gems/active_call)**
+
+**The `active_service` Gem name was already taken, I didn't look before creating this repo 🙄**
+
 Active Call provides a standardized way to create service objects.
 
 ## Installation
